@@ -1,158 +1,33 @@
-.App {
-  width: 100vw;
-  height: auto;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
 }
-
-body {
-  margin: 0;
-  padding: 0;
+div.App {
+    display: flex;
+    flex-direction: column;
 }
-
 .post {
-  width: 400px;
-  height: 300px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 50px;
-  border: 1px solid lightgray;
-  font-family: Arial, Helvetica, sans-serif;
-
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: aliceblue;
+    border-radius: 1rem;
+    width: 260px;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
 }
-
-.post:hover {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  cursor: pointer;
+.title {
+    background-color: lightgray;
+    border-radius: 1rem 1rem 0 0;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
-.post .title {
-  flex: 20%;
-  border-bottom: 1px solid lightgray;
-  background-color: dodgerblue;
-  display: grid;
-  place-content: center;
-  color: white;
+.body {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
 }
-
-.post .body {
-  flex: 60%;
-  display: grid;
-  place-content: center;
-}
-
-.post .footer {
-  flex: 20%;
-  border-top: 1px solid lightgray;
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-  background-color: dodgerblue;
-  color: white;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-/* CREATE POST PAGE CSS */
-
-.createPostPage {
-  font-family: Arial, Helvetica, sans-serif;
-  width: 100vw;
-  height: 70vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.formContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 500px;
-  height: auto;
-  padding: 20px;
-  border: 5px solid dodgerblue;
-  border-radius: 5px;
-}
-
-.formContainer #inputCreatePost {
-  height: 40px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 2px solid grey;
-  border-radius: 5px;
-  padding-left: 10px;
-  font-size: 20px;
-}
-
-.formContainer button {
-  margin-top: 15px;
-  height: 40px;
-  border: none;
-  background-color: lightskyblue;
-  border-radius: 5px;
-  color: white;
-}
-
-.formContainer button:hover {
-  cursor: pointer;
-  background-color: dodgerblue;
-}
-
-span {
-  color: red;
-}
-
-/* NAVBAR */
-
-.navbar {
-  width: 100%;
-  height: 70px;
-  background-color: dodgerblue;
-  display: flex;
-  align-items: center;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.navbar a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: white;
-}
-
-/* INDIVIDUAL POST */
-.postPage {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-}
-
-.leftSide {
-  flex: 50%;
-  height: calc(100vh - 70px);
-  display: grid;
-  place-items: center;
-}
-
-.rightSide {
-  flex: 50%;
-  height: calc(100vh - 70px);
-  display: grid;
-  place-items: center;
-}
-
-#individual {
-  height: 500px;
-  width: 600px;
-}
-
-#individual .title,
-#individual .footer {
-  font-size: 30px;
-}
-
-#individual .body {
-  font-size: 25px;
+.footer {
+    font-size: 1rem;
+    color: gray;
+    margin-top: 1rem;
 }
