@@ -17,7 +17,7 @@ const CreatePost = () => {
         });
     };
     const validationSchema = Yup.object().shape({
-        title: Yup.string().required("Fill or die   "),
+        title: Yup.string().required(),
         postText: Yup.string().required(),
         username: Yup.string().min(3).max(40).required(),
     });
@@ -28,7 +28,7 @@ const CreatePost = () => {
                 onSubmit={onSubmit}
                 validationSchema={validationSchema}
             >
-                <Form>
+                <Form className="newpostForm">
                     <label>Title</label>
                     <ErrorMessage name="title" component="span" />
                     <Field
