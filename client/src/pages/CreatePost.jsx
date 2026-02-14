@@ -1,10 +1,15 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { data } from "react-router-dom";
+import { data, Navigate } from "react-router-dom";
 import * as Yup from "yup";
 import Axios from "axios";
+import { AuthContext } from "../helpers/Context";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+    const { authState } = useContext(AuthContext);
+    const navigate = useNavigate();
     const initialValues = {
         title: "",
         postText: "",
@@ -12,14 +17,26 @@ const CreatePost = () => {
     };
 
     const onSubmit = (data) => {
-        Axios.post("http://localhost:3000/posts", data).then((response) => {
-            // console.log("success");
-        });
+        Axios.post("http://localhost:3000/posts", data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken"),
+            },
+        })
+            .then((response) => {})
+            .then((response) => {
+                // console.log("success");
+            });
+        navigate("/");
     };
+    useEffect(() => {
+        if (!authState.status) {
+            navigate("/auth/login");
+        }
+    }, []);
+
     const validationSchema = Yup.object().shape({
         title: Yup.string().required(),
         postText: Yup.string().required(),
-        username: Yup.string().min(3).max(40).required(),
     });
     return (
         <div className="createPostPage">
@@ -45,14 +62,6 @@ const CreatePost = () => {
                         placeholder="your post"
                     />
 
-                    <label>username</label>
-                    <ErrorMessage name="username" component="span" />
-
-                    <Field
-                        id="postInput"
-                        name="username"
-                        placeholder="your name"
-                    />
                     <button type="submit">Submit Form</button>
                 </Form>
             </Formik>

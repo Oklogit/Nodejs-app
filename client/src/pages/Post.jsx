@@ -1,13 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../helpers/Context";
 
 function Post() {
     let { id } = useParams();
     const [postObject, setPostObject] = useState({});
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
+    const { authState } = useContext(AuthContext);
 
     useEffect(() => {
         axios.get(`http://localhost:3000/posts/byId/${id}`).then((response) => {
@@ -28,7 +30,7 @@ function Post() {
                 },
                 {
                     headers: {
-                        accessToken: sessionStorage.getItem("accessToken"),
+                        accessToken: localStorage.getItem("accessToken"),
                     },
                 },
             )
@@ -36,12 +38,27 @@ function Post() {
                 if (response.data.error) {
                     console.log(response.data.error);
                 } else {
-                    const addedComment = { commentBody: newComment };
+                    const addedComment = {
+                        commentBody: newComment,
+                        username: response.data.username,
+                    };
                     //this makes sure the new comment shows up without refreshing
                     setComments([...comments, addedComment]);
                     setNewComment("");
                     // console.log(comments);
                 }
+            });
+    };
+    const deleteComment = (commentId) => {
+        axios
+            .delete(`http://localhost:3000/comments/${commentId}`, {
+                headers: {
+                    accessToken: localStorage.getItem("accessToken"),
+                },
+            })
+            .then((response) => {
+                alert("Comment deleted");
+                setComments(comments.filter((val) => val.id !== commentId)); //filter out the deleted comment from the comments array and update the state
             });
     };
     return (
@@ -68,8 +85,27 @@ function Post() {
                 <div className="commentsList">
                     {comments.map((comment, key) => {
                         return (
-                            <div key={key} className="comment">
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                }}
+                                key={key}
+                                className="comment"
+                            >
+                                <label htmlFor="">
+                                    Username: {comment.username}
+                                </label>
                                 {comment.commentBody}
+                                {authState.username == comment.username && (
+                                    <button
+                                        onClick={() =>
+                                            deleteComment(comment.id)
+                                        }
+                                    >
+                                        x
+                                    </button>
+                                )}
                             </div>
                         );
                     })}

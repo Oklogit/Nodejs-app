@@ -5,7 +5,15 @@
     align-items: center;
     flex-direction: column;
 }
-
+.likebutton {
+    color: red;
+    margin-left: 5px;
+}
+.unlikebutton {
+    color: #6a778181;
+    margin-left: 5px;
+    background-color: none;
+}
 body {
     margin: 0;
     padding: 0;

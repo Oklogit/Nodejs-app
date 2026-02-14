@@ -12,7 +12,8 @@ const validateToken = (req, res, next) => {
     try {
         //verify token from request and compare it using the same secret used to create it
         const validToken = verify(accessToken, "importantsecret");
-        req.user = validToken;
+        req.user = validToken; //we can use the middleware to create vars be called on every request/endpoint we pass the middleware)
+        //because validtoken contains the  payload data we sent while creating the token,
         if (validToken) {
             return next();
         }

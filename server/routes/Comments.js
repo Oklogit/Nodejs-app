@@ -21,8 +21,20 @@ router.get("/:postId", async (req, res) => {
 // });
 router.post("/", validateToken, async (req, res) => {
     const comment = req.body;
-    const createdComment = await Comments.create(comment);
-    res.json(createdComment); // ← Return the created record with ID
-    console.log("comment", createdComment);
+    const username = req.user.username; // Extract username from the validated token
+    // const createdComment = await Comments.create(comment);
+    //access username whenever a requuest is made with a valid token
+    comment.username = username;
+    await Comments.create(comment);
+    res.json(comment);
+    // createdComment.username = username;
+    // res.json(createdComment); // ← Return the created record with ID
 });
 module.exports = router;
+
+router.delete("/:commentId", validateToken, async (req, res) => {
+    const commentId = req.params.commentId; //we can access req.params
+
+    await Comments.destroy({ where: { id: commentId } });
+    res.json({ message: "Comment deleted" });
+});

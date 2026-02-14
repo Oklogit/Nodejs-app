@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { Posts } = require("../models");
+const { Posts, Likes } = require("../models");
+const { validateToken } = require("../middlewares/AuthMiddleware");
 
-router.get("/", async (req, res) => {
-    const postList = await Posts.findAll();
-    res.json(postList);
+router.get("/", validateToken, async (req, res) => {
+    const postList = await Posts.findAll({ include: [Likes] });
+
+    const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+    res.json({ postList, likedPosts });
 });
 
 router.get("/byId/:id", async (req, res) => {
@@ -13,9 +16,10 @@ router.get("/byId/:id", async (req, res) => {
     res.json(post);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validateToken, async (req, res) => {
     try {
         const post = req.body;
+        post.username = req.user.username; // Set the username from the validated token
         const newPost = await Posts.create(post);
         res.json(newPost);
     } catch (error) {
