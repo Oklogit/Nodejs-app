@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../helpers/Context";
+import { useNavigate } from "react-router-dom";
 
 function Post() {
     let { id } = useParams();
@@ -10,13 +11,15 @@ function Post() {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const { authState } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:3000/posts/byId/${id}`).then((response) => {
             setPostObject(response.data);
         });
         axios.get(`http://localhost:3000/comments/${id}`).then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
+
             setComments(response.data);
         });
     }, []);
@@ -61,13 +64,30 @@ function Post() {
                 setComments(comments.filter((val) => val.id !== commentId)); //filter out the deleted comment from the comments array and update the state
             });
     };
+    const deletePost = (id) => {
+        axios
+            .delete(`http://localhost:3000/posts/${id}`, {
+                headers: {
+                    accessToken: localStorage.getItem("accessToken"),
+                },
+            })
+            .then((response) => {
+                navigate("/");
+            });
+    };
     return (
         <div className="postPage">
             <div className="leftSide">
                 <div className="post">
                     <div className="title">{postObject.title}</div>
                     <div className="body">{postObject.postText}</div>
-                    <div className="footer">{postObject.username}</div>
+                    <div className="footer">
+                        {postObject.username === authState.username ? (
+                            <button onClick={() => deletePost(postObject.id)}>
+                                delete
+                            </button>
+                        ) : null}
+                    </div>
                 </div>
             </div>
             <div className="rightSide">

@@ -13,23 +13,30 @@ export const Home = () => {
     const [likedPosts, setLikedPosts] = useState([]);
 
     useEffect(() => {
-        if (!authState.status) {
+        if (!localStorage.getItem("accessToken")) {
             navigate("/auth/login");
-        } else {
-            navigate("/");
+            return; // Exit early if no token
         }
+
         Axios.get("http://localhost:3000/posts", {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             },
-        }).then((response) => {
-            setListOfPosts(response.data.postList);
-            setLikedPosts(
-                response.data.likedPosts.map((like) => {
-                    return like.PostId;
-                }),
-            );
-        });
+        })
+            .then((response) => {
+                setListOfPosts(response.data.postList);
+                setLikedPosts(
+                    response.data.likedPosts.map((like) => {
+                        return like.PostId;
+                    }),
+                );
+            })
+            .catch((error) => {
+                console.error("Failed to fetch posts:", error);
+                if (error.response && error.response.status === 401) {
+                    navigate("/auth/login");
+                }
+            });
     }, []);
     const likePost = (postId, e) => {
         e.stopPropagation();

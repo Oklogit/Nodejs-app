@@ -6,11 +6,11 @@
     flex-direction: column;
 }
 .likebutton {
-    color: red;
+    color: #6a778181;
     margin-left: 5px;
 }
 .unlikebutton {
-    color: #6a778181;
+    color: red;
     margin-left: 5px;
     background-color: none;
 }

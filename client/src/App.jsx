@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import { AuthContext } from "./helpers/Context";
 import axios from "axios";
 import Pagenotfound from "./pages/Pagenotfound";
+import Profile from "./pages/Profile";
 
 const App = () => {
     const [authState, setAuthState] = useState({
@@ -34,6 +35,9 @@ const App = () => {
                         status: true,
                     });
                 }
+            })
+            .catch(() => {
+                setAuthState({ username: "", id: 0, status: false });
             });
     }, []);
     const logout = () => {
@@ -56,12 +60,20 @@ const App = () => {
                             <>
                                 <Link to="/Createpost">Create a post</Link>{" "}
                                 <Link to="/">Homepage</Link>{" "}
+                                <Link to={`/auth/basicinfo/${authState.id}`}>
+                                    Profile
+                                </Link>
                             </>
                         )}
                         <div className="loggedIncont">
-                            <button onClick={logout}>Logout</button>{" "}
                             {authState.status && (
-                                <h3>Welcome, {authState.username}</h3>
+                                <>
+                                    {" "}
+                                    <h3>Welcome, {authState.username}</h3>
+                                    <button onClick={logout}>
+                                        Logout
+                                    </button>{" "}
+                                </>
                             )}
                         </div>
                     </nav>
@@ -73,6 +85,10 @@ const App = () => {
                         <Route
                             path="/registration"
                             element={<Registration />}
+                        ></Route>
+                        <Route
+                            path="/auth/basicinfo/:id"
+                            element={<Profile />}
                         ></Route>
                         <Route path="*" element={<Pagenotfound />}></Route>
                     </Routes>

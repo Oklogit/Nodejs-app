@@ -26,10 +26,10 @@ const CreatePost = () => {
             .then((response) => {
                 // console.log("success");
             });
-        navigate("/");
+        // navigate("/");
     };
     useEffect(() => {
-        if (!authState.status) {
+        if (!localStorage.getItem("accessToken")) {
             navigate("/auth/login");
         }
     }, []);
