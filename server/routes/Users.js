@@ -8,6 +8,13 @@ const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.post("/", async (req, res) => {
     const { username, password } = req.body;
+
+    const user = await Users.findOne({ where: { username: username } });
+    if (user) {
+        return res.status(400).json({
+            error: "User already exists. Go to login or try a different username.",
+        });
+    }
     const hash = await bcrypt.hash(password, 10);
     await Users.create({ username, password: hash });
     res.json({ message: "User created successfully" });
@@ -42,5 +49,32 @@ router.get("/basicinfo/:id", async (req, res) => {
         attributes: { exclude: ["password"] },
     });
     res.json(basicinfo);
+});
+
+router.put("/changepassword", validateToken, async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id;
+
+    try {
+        const user = await Users.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!passwordMatch) {
+            return res.status(400).json({ error: "Old password is incorrect" });
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        await Users.update(
+            { password: hashedNewPassword },
+            { where: { id: userId } },
+        );
+
+        res.json({ message: "Password changed successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 module.exports = router;

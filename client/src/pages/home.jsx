@@ -2,9 +2,11 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { AuthContext } from "../helpers/Context";
+import { Link } from "react-router-dom";
+import { Card } from "flowbite-react";
 
 export const Home = () => {
     const { authState } = useContext(AuthContext);
@@ -15,7 +17,7 @@ export const Home = () => {
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
             navigate("/auth/login");
-            return; // Exit early if no token
+            return;
         }
 
         Axios.get("http://localhost:3000/posts", {
@@ -25,6 +27,8 @@ export const Home = () => {
         })
             .then((response) => {
                 setListOfPosts(response.data.postList);
+                console.log(response.data.postList);
+
                 setLikedPosts(
                     response.data.likedPosts.map((like) => {
                         return like.PostId;
@@ -38,6 +42,7 @@ export const Home = () => {
                 }
             });
     }, []);
+
     const likePost = (postId, e) => {
         e.stopPropagation();
         Axios.post(
@@ -49,59 +54,109 @@ export const Home = () => {
                 },
             },
         ).then((response) => {
-            // alert(response.data.message);
             setListOfPosts(
                 listofPosts.map((post) => {
                     if (post.id === postId) {
                         if (response.data.liked) {
-                            return { ...post, Likes: [...post.Likes, 0] }; //modify likes array by adding a dummy element to it (0) so that the length of the array increases by 1 and the like count updates without refreshing
+                            return { ...post, Likes: [...post.Likes, 0] };
                         }
-                        return { ...post, Likes: post.Likes.slice(0, -1) }; //remove the last element from the likes array if unliked
+                        return { ...post, Likes: post.Likes.slice(0, -1) };
                     } else {
                         return post;
                     }
                 }),
             );
             if (response.data.liked) {
-                setLikedPosts([...likedPosts, postId]); //add the postId to the likedPosts array if it's not already there
+                setLikedPosts([...likedPosts, postId]);
             } else {
-                setLikedPosts(likedPosts.filter((id) => id !== postId)); //remove the postId from the likedPosts array if it's there
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
             }
         });
     };
+
     return (
-        <div>
-            {listofPosts.map((value, key) => {
-                return (
-                    <div
-                        key={key}
-                        className="post"
-                        onClick={() => {
-                            navigate(`/post/${value.id}`);
-                        }}
-                    >
-                        <div className="title">{value.title}</div>
-                        <div className="body">{value.postText}</div>
-                        <div className="footer">
-                            - {value.username}
-                            <div
-                                className={
-                                    likedPosts.includes(value.id)
-                                        ? "unlikebutton"
-                                        : "likebutton"
-                                }
-                            >
-                                <FavoriteIcon
-                                    onClick={(e) => likePost(value.id, e)}
-                                />
-                            </div>
-                            <label className="likes-count">
-                                {value.Likes.length}
-                            </label>
-                        </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-24 pb-8">
+            <div className="px-4 sm:px-6 lg:px-8 py-3 mt-6">
+                <div className="mb-8">
+                    <h1 className="text-4xl font-bold text-primaryBlue mb-2">
+                        Latest Posts
+                    </h1>
+                    <p className="text-gray-600">
+                        Explore and engage with the community
+                    </p>
+                </div>
+
+                {listofPosts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
+                        {listofPosts.map((value, key) => {
+                            const isLiked = likedPosts.includes(value.id);
+                            return (
+                                <Card
+                                    key={key}
+                                    className="cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
+                                    onClick={() => {
+                                        navigate(`/post/${value.id}`);
+                                    }}
+                                >
+                                    <div className="bg-gradient-to-r from-primaryBlue to-blue-900 p-4 -mx-6 -mt-6 mb-4">
+                                        <h2 className="text-2xl font-bold text-white line-clamp-2">
+                                            {value.title}
+                                        </h2>
+                                    </div>
+
+                                    <p className="text-gray-700 text-lg mb-4 leading-relaxed line-clamp-3">
+                                        {value.postText}
+                                    </p>
+
+                                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                                        <Link
+                                            to={`/auth/basicinfo/${value.UserId}`}
+                                            className="text-primaryBlue font-semibold hover:text-coral transition-colors"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            {value.username}
+                                        </Link>
+
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                onClick={(e) =>
+                                                    likePost(value.id, e)
+                                                }
+                                                className={`flex items-center gap-1 font-semibold transition-all ${
+                                                    isLiked
+                                                        ? "text-coral"
+                                                        : "text-gray-400 hover:text-coral"
+                                                }`}
+                                            >
+                                                {isLiked ? (
+                                                    <FavoriteIcon
+                                                        fontSize="small"
+                                                        style={{
+                                                            fill: "#D44D5C",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <FavoriteBorderIcon />
+                                                )}
+                                                <span>
+                                                    {value.Likes.length}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Card>
+                            );
+                        })}
                     </div>
-                );
-            })}
+                ) : (
+                    <Card className="text-center py-12">
+                        <div className="text-6xl mb-4">📭</div>
+                        <p className="text-xl text-gray-600">
+                            No posts yet. Be the first to create one!
+                        </p>
+                    </Card>
+                )}
+            </div>
         </div>
     );
 };

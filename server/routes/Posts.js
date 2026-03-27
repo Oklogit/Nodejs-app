@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Posts, Likes } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
+const { where } = require("sequelize");
 
 router.get("/", validateToken, async (req, res) => {
     try {
@@ -18,15 +19,26 @@ router.get("/", validateToken, async (req, res) => {
     }
 });
 
-router.get("/byId/:id", async (req, res) => {
+router.get("/byId/:id", validateToken, async (req, res) => {
+    const userId = req.user.id;
     const id = req.params.id;
-    let post = await Posts.findByPk(id);
-    res.json(post);
+
+    let post = await Posts.findByPk(id, { include: [Likes] });
+    const likedByUser = post.Likes.some((like) => like.UserId === userId);
+
+    res.json({
+        ...post.toJSON(),
+        likedByUser,
+        likesCount: post.Likes.length,
+    });
 });
 //to get all posts of a specific user by their userId, this will be used in the profile page to show all posts of the user whose profile is being viewed
 router.get("/byuserId/:id", async (req, res) => {
     const id = req.params.id;
-    let listofUserPosts = await Posts.findAll({ where: { UserId: id } });
+    let listofUserPosts = await Posts.findAll({
+        where: { UserId: id },
+        include: [Likes],
+    });
     res.json(listofUserPosts);
 });
 
@@ -40,6 +52,27 @@ router.post("/", validateToken, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to create post" });
+    }
+});
+
+router.put("/title", validateToken, async (req, res) => {
+    try {
+        const { newTitle, id } = req.body; //destructure title from the request body
+        await Posts.update({ title: newTitle }, { where: { id: id } });
+        res.json(newTitle);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to update post" });
+    }
+});
+router.put("/body", validateToken, async (req, res) => {
+    try {
+        const { newPostText, id } = req.body; //destructure postText from the request body
+        await Posts.update({ postText: newPostText }, { where: { id: id } });
+        res.json(newPostText);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to update post" });
     }
 });
 
