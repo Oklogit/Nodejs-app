@@ -9,6 +9,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Axios from "axios";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 // import { ref } from "yup";
 
 function Post() {
@@ -177,7 +179,6 @@ function Post() {
                             {" "}
                             <MoreVertIcon fontSize="large" />{" "}
                         </button>
-
                         {/* Dropdown */}
                         {open && (
                             <div className="absolute top-10 mt-4 w-36 bg-white border rounded shadow z-50">
@@ -314,21 +315,31 @@ function Post() {
                                             {comment.username}
                                         </label>
                                     </div>
-                                    <p className="text-gray-700 mb-4">
-                                        {comment.commentBody}
-                                    </p>
-                                    {authState.username ===
-                                        comment.username && (
-                                        <Button
-                                            color="failure"
-                                            onClick={() =>
-                                                deleteComment(comment.id)
-                                            }
-                                            size="sm"
-                                        >
-                                            Delete
-                                        </Button>
-                                    )}
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div>
+                                            <p className="text-gray-700 break-all ">
+                                                {comment.commentBody}
+                                            </p>
+                                        </div>
+
+                                        {authState.username ===
+                                            comment.username && (
+                                            <>
+                                                <IconButton
+                                                    onClick={() =>
+                                                        deleteComment(
+                                                            comment.id,
+                                                        )
+                                                    }
+                                                    size="small"
+                                                    className="ml-4"
+                                                    title="Delete comment"
+                                                >
+                                                    <DeleteIcon className="text-red-500 hover:text-red-700" />{" "}
+                                                </IconButton>
+                                            </>
+                                        )}
+                                    </div>
                                 </Card>
                             );
                         })

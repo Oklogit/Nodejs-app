@@ -80,6 +80,19 @@ const App = () => {
                             bkblog
                         </span>
                     </NavbarBrand>
+                    <>
+                        {authState.status && (
+                            <div className="flex items-center gap-2 md:order-2 ml-auto">
+                                {/* <span className="text-white font-semibold hidden sm:inline">
+                                            {authState.username}
+                                        </span> */}
+                                <Button color="red" onClick={logout} size="sm">
+                                    Logout
+                                </Button>
+                            </div>
+                        )}
+                        <NavbarToggle />
+                    </>
                     <NavbarCollapse className="md:flex md:items-center md:gap-6 md:ml-6">
                         {!authState.status ? (
                             <>
@@ -125,19 +138,6 @@ const App = () => {
                             </>
                         )}
                     </NavbarCollapse>
-                    <>
-                        {authState.status && (
-                            <div className="flex items-center gap-2 md:order-2 ml-auto">
-                                {/* <span className="text-white font-semibold hidden sm:inline">
-                                            {authState.username}
-                                        </span> */}
-                                <Button color="red" onClick={logout} size="sm">
-                                    Logout
-                                </Button>
-                            </div>
-                        )}
-                        <NavbarToggle />
-                    </>
                 </Navbar>
                 <Routes>
                     <Route path="/" element={<Home />} />
