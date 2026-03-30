@@ -14,11 +14,13 @@
         "dialect": "mysql"
     },
     "production": {
-        "username": "oklo_nodejs_blog_user",
-        "password": "CP19qTNL66Lecnq5p6BaSl7gTX4xlNIU",
-        "database": "oklo_nodejs_blog",
-        "host": "postgresql://oklo_nodejs_blog_user:CP19qTNL66Lecnq5p6BaSl7gTX4xlNIU@dpg-d74nsmhaae7s73bkvjs0-a/oklo_nodejs_blog",
+        "use_env_variable": "DATABASE_URL",
         "dialect": "postgres",
-        "port": "5432"
+        "dialectOptions": {
+            "ssl": {
+                "require": true,
+                "rejectUnauthorized": false
+            }
+        }
     }
 }
