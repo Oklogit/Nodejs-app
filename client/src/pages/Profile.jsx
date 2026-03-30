@@ -1,11 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { AuthContext } from "../helpers/Context";
-import { Button, Card } from "flowbite-react";
+// import { Button, Card } from "flowbite-react";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import profileBg from "../assets/profile-bg.jpg";
 import { Dropdown, DropdownItem } from "flowbite-react";
@@ -209,24 +208,24 @@ function Profile() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {listofUserPosts.map((value, key) => {
                             return (
-                                <Card
+                                <div
                                     key={key}
-                                    className="cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                                    className="cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col h-full rounded-lg border border-gray-200 bg-white shadow-md justify-between"
                                     onClick={() => {
                                         navigate(`/post/${value.id}`);
                                     }}
                                 >
-                                    <div className="bg-gradient-to-r from-primaryBlue to-blue-900 p-4 -mx-6 -mt-6 mb-4 rounded-t-lg">
+                                    <div className="bg-gradient-to-r from-primaryBlue to-blue-900 p-4 mb-4">
                                         <h3 className="text-xl font-bold text-white line-clamp-2">
                                             {value.title}
                                         </h3>
                                     </div>
 
-                                    <p className="text-gray-700 line-clamp-3 mb-4 leading-relaxed">
+                                    <p className="text-gray-700 text-lg mb-6 mx-4 leading-relaxed overflow-hidden line-clamp-3">
                                         {value.postText}
                                     </p>
 
-                                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                                    <div className="flex items-center justify-between p-3 px-4 border-t border-gray-200">
                                         <span className="text-sm text-gray-500">
                                             by{" "}
                                             <span className="font-semibold text-primaryBlue">
@@ -234,11 +233,11 @@ function Profile() {
                                             </span>
                                         </span>
                                         <div className="flex items-center gap-1 text-coral font-semibold">
-                                            <FavoriteIcon fontSize="small" />
+                                            <FavoriteBorderIcon fontSize="small" />
                                             <span>{value.Likes.length}</span>
                                         </div>
                                     </div>
-                                </Card>
+                                </div>
                             );
                         })}
                     </div>

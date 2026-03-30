@@ -27,7 +27,6 @@ export const Home = () => {
         })
             .then((response) => {
                 setListOfPosts(response.data.postList);
-                console.log(response.data.postList);
 
                 setLikedPosts(
                     response.data.likedPosts.map((like) => {
@@ -87,28 +86,28 @@ export const Home = () => {
                 </div>
 
                 {listofPosts.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {listofPosts.map((value, key) => {
                             const isLiked = likedPosts.includes(value.id);
                             return (
-                                <Card
+                                <div
                                     key={key}
-                                    className="cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
-                                    onClick={() => {
-                                        navigate(`/post/${value.id}`);
-                                    }}
+                                    className="cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col h-full rounded-lg border border-gray-200 bg-white shadow-md justify-between"
+                                    onClick={() =>
+                                        navigate(`/post/${value.id}`)
+                                    }
                                 >
-                                    <div className="bg-gradient-to-r from-primaryBlue to-blue-900 p-4 -mx-6 -mt-6 mb-4">
+                                    <div className="bg-gradient-to-r from-primaryBlue to-blue-900 p-4 mb-4">
                                         <h2 className="text-2xl font-bold text-white line-clamp-2">
                                             {value.title}
                                         </h2>
                                     </div>
 
-                                    <p className="text-gray-700 text-lg mb-4 leading-relaxed line-clamp-3">
+                                    <p className="text-gray-700 text-lg mb-6 mx-4 leading-relaxed overflow-hidden line-clamp-3">
                                         {value.postText}
                                     </p>
 
-                                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                                    <div className="flex items-center justify-between p-3 px-4 border-t border-gray-200">
                                         <Link
                                             to={`/auth/basicinfo/${value.UserId}`}
                                             className="text-primaryBlue font-semibold hover:text-coral transition-colors"
@@ -144,7 +143,7 @@ export const Home = () => {
                                             </button>
                                         </div>
                                     </div>
-                                </Card>
+                                </div>
                             );
                         })}
                     </div>

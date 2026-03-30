@@ -308,37 +308,62 @@ function Post() {
                             return (
                                 <Card
                                     key={key}
-                                    className="border-l-4 border-l-skyBlue shadow-md transition-shadow"
+                                    className="shadow-md rounded-2xl p-4 mb-3"
                                 >
-                                    <div className="mb-3">
-                                        <label className="text-sm font-semibold text-primaryBlue">
-                                            {comment.username}
-                                        </label>
-                                    </div>
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div>
-                                            <p className="text-gray-700 break-all ">
-                                                {comment.commentBody}
-                                            </p>
+                                    <div className="flex items-start gap-3">
+                                        {/* Profile Photo */}
+                                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primaryBlue to-blue-900 border-2 border-white shadow flex items-center justify-center">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="white"
+                                                className="w-6 h-6"
+                                            >
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                                            </svg>
                                         </div>
 
-                                        {authState.username ===
-                                            comment.username && (
-                                            <>
-                                                <IconButton
-                                                    onClick={() =>
-                                                        deleteComment(
-                                                            comment.id,
-                                                        )
-                                                    }
-                                                    size="small"
-                                                    className="ml-4"
-                                                    title="Delete comment"
-                                                >
-                                                    <DeleteIcon className="text-red-500 hover:text-red-700" />{" "}
-                                                </IconButton>
-                                            </>
-                                        )}
+                                        {/* Comment Content */}
+                                        <div className="flex-1 min-w-0">
+                                            {/* Header: username + delete */}
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-sm font-semibold text-primaryBlue">
+                                                    {comment.username}
+                                                </span>
+
+                                                {authState.username ===
+                                                    comment.username && (
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            deleteComment(
+                                                                comment.id,
+                                                            )
+                                                        }
+                                                        size="small"
+                                                        title="Delete comment"
+                                                    >
+                                                        <DeleteIcon className="text-red-400 hover:text-red-600" />
+                                                    </IconButton>
+                                                )}
+                                            </div>
+
+                                            {/* Comment Body */}
+                                            <p className="text-gray-700 text-sm break-words leading-relaxed">
+                                                {comment.commentBody}
+                                            </p>
+
+                                            {/* Footer: like */}
+                                            <div className="flex items-center gap-1 mt-3 pt-2 border-t border-gray-100">
+                                                <FavoriteIcon
+                                                    fontSize="small"
+                                                    style={{ fill: "#D44D5C" }}
+                                                    className="cursor-default"
+                                                />
+                                                <span className="text-xs text-gray-400">
+                                                    Like
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </Card>
                             );
