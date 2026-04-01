@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(
     cors({
-        origin: "https://bkblog-nodejs.vercel.app/",
+        origin: "https://bkblog-nodejs.vercel.app",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "accessToken"],
     }),
