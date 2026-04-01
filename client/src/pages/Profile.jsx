@@ -20,14 +20,14 @@ function Profile() {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/auth/basicinfo/${id}`)
+            .get(`${import.meta.env.VITE_API_URL}/auth/basicinfo/${id}`)
             .then((response) => {
                 setUsername(response.data.username);
                 console.log(response.data.createdAt);
                 setCreatedAt(response.data.createdAt);
             });
         axios
-            .get(`http://localhost:3000/posts/byuserId/${id}`)
+            .get(`${import.meta.env.VITE_API_URL}/posts/byuserId/${id}`)
             .then((response) => {
                 setListofUserPosts(response.data);
                 // console.log(response.data);

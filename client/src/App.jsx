@@ -33,7 +33,7 @@ const App = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:3000/auth/auth", {
+            .get(`${import.meta.env.VITE_API_URL}/auth/auth`, {
                 headers: {
                     accessToken: localStorage.getItem("accessToken"),
                 },

@@ -28,7 +28,7 @@ function Post() {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3000/posts/byId/${id}`, {
+            .get(`${import.meta.env.VITE_API_URL}/posts/byId/${id}`, {
                 headers: {
                     accessToken: localStorage.getItem("accessToken"),
                 },
@@ -42,15 +42,17 @@ function Post() {
             .catch((error) => {
                 console.log(error);
             });
-        axios.get(`http://localhost:3000/comments/${id}`).then((response) => {
-            setComments(response.data);
-        });
+        axios
+            .get(`${import.meta.env.VITE_API_URL}/comments/${id}`)
+            .then((response) => {
+                setComments(response.data);
+            });
     }, []);
 
     const addComment = () => {
         axios
             .post(
-                "http://localhost:3000/comments",
+                `${import.meta.env.VITE_API_URL}/comments`,
                 {
                     commentBody: newComment,
                     PostId: id,
@@ -77,7 +79,7 @@ function Post() {
 
     const deleteComment = (commentId) => {
         axios
-            .delete(`http://localhost:3000/comments/${commentId}`, {
+            .delete(`${import.meta.env.VITE_API_URL}/comments/${commentId}`, {
                 headers: {
                     accessToken: localStorage.getItem("accessToken"),
                 },
@@ -90,7 +92,7 @@ function Post() {
 
     const deletePost = (id) => {
         axios
-            .delete(`http://localhost:3000/posts/${id}`, {
+            .delete(`${import.meta.env.VITE_API_URL}/posts/${id}`, {
                 headers: {
                     accessToken: localStorage.getItem("accessToken"),
                 },
@@ -105,7 +107,7 @@ function Post() {
             let newTitle = prompt("Enter new title:");
             if (newTitle) {
                 axios.put(
-                    "http://localhost:3000/posts/title",
+                    `${import.meta.env.VITE_API_URL}/posts/title`,
                     { newTitle: newTitle, id: id },
                     {
                         headers: {
@@ -119,7 +121,7 @@ function Post() {
             let newPostText = prompt("Enter new post text:");
             if (newPostText) {
                 axios.put(
-                    "http://localhost:3000/posts/postText",
+                    `${import.meta.env.VITE_API_URL}/posts/postText`,
                     { newPostText: newPostText, id: id },
                     {
                         headers: {
@@ -134,7 +136,7 @@ function Post() {
     const likePost = (e) => {
         e.stopPropagation();
         Axios.post(
-            "http://localhost:3000/likes",
+            `${import.meta.env.VITE_API_URL}/likes`,
             { PostId: id },
             {
                 headers: {

@@ -22,7 +22,7 @@ const Registration = () => {
     const onSubmit = (data) => {
         setError("");
         setLoading(true);
-        Axios.post("http://localhost:3000/auth", data)
+        Axios.post(`${import.meta.env.VITE_API_URL}/auth`, data)
             .then((response) => {
                 // Redirect to login or auto-login
                 window.location.href = "/auth/login";

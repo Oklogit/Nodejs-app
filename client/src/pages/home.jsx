@@ -20,7 +20,7 @@ export const Home = () => {
             return;
         }
 
-        Axios.get("http://localhost:3000/posts", {
+        Axios.get(`${import.meta.env.VITE_API_URL}/posts`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             },
@@ -45,7 +45,7 @@ export const Home = () => {
     const likePost = (postId, e) => {
         e.stopPropagation();
         Axios.post(
-            "http://localhost:3000/likes",
+            `${import.meta.env.VITE_API_URL}/likes`,
             { PostId: postId },
             {
                 headers: {

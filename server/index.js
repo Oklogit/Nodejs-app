@@ -1,9 +1,16 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+        origin: "https://bkblog-nodejs.vercel.app/",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "accessToken"],
+    }),
+);
 
 const db = require("./models");
 
@@ -21,7 +28,7 @@ const likesRouter = require("./routes/Likes");
 app.use("/likes", likesRouter);
 
 db.sequelize.sync().then(() => {
-    app.listen(3000, () => {
-        console.log("Server running on port 3000");
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
     });
 });

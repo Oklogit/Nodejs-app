@@ -37,7 +37,7 @@ function ChangePassword() {
         try {
             const accessToken = localStorage.getItem("accessToken");
             const response = await axios.put(
-                "http://localhost:3000/auth/changepassword",
+                `${import.meta.env.VITE_API_URL}/auth/changepassword`,
                 { oldPassword, newPassword },
                 { headers: { accessToken } },
             );

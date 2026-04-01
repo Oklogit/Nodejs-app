@@ -17,7 +17,7 @@ const CreatePost = () => {
     };
 
     const onSubmit = (data) => {
-        Axios.post("http://localhost:3000/posts", data, {
+        Axios.post(`${import.meta.env.VITE_API_URL}/posts`, data, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             },
