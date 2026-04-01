@@ -128,12 +128,12 @@ const Registration = () => {
 
                 <p className="text-center text-gray-600 mt-6">
                     Already have an account?{" "}
-                    <a
-                        href="/auth/login"
+                    <Link
+                        to="/auth/login"
                         className="text-coral font-semibold hover:underline"
                     >
                         Login
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>
