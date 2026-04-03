@@ -16,6 +16,10 @@ function Login() {
     const login = () => {
         setError("");
         setLoading(true);
+        if (!username || !password) {
+            setError("Please enter your username and password.");
+            return;
+        }
         const data = { username, password };
         axios
             .post(`${import.meta.env.VITE_API_URL}/auth/login`, data)
