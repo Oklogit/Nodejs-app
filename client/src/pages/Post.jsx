@@ -169,7 +169,6 @@ function Post() {
                 {/* <Card className="w-full max-w-2xl shadow-lg border border-gray-200"> */}
                 <div className="flex flex-row  items-center gap-2 p-6 rounded-t-lg -mx-6 mt-6 mb-4">
                     <h1 className="text-3xl font-bold text-primaryBlue ">
-                        Top Striker
                         {postObject.title}
                     </h1>
                     <div className="relative flex" ref={ref}>
@@ -234,7 +233,7 @@ function Post() {
                 </div>
 
                 <div
-                    className={`text-xl text-gray-700 leading-relaxed mb-6 p-4 rounded-lg ${
+                    className={`text-xl text-gray-700 leading-relaxed mb-6 p-4 rounded-lg whitespace-pre-line   ${
                         authState.username === postObject.username
                             ? "hover:bg-opacity-20 transition-colors"
                             : ""
@@ -350,7 +349,7 @@ function Post() {
                                             </div>
 
                                             {/* Comment Body */}
-                                            <p className="text-gray-700 text-sm break-words leading-relaxed">
+                                            <p className="text-gray-700 text-sm break-words leading-relaxed whitespace-pre-line">
                                                 {comment.commentBody}
                                             </p>
 
