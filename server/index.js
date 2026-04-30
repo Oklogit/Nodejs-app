@@ -1,17 +1,17 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(
     cors({
-        origin: "https://bkblog-nodejs.vercel.app",
+        origin: ["https://bkblog-nodejs.vercel.app", "http://localhost:5173"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "accessToken"],
     }),
 );
-
 const db = require("./models");
 
 // Routers
@@ -28,7 +28,7 @@ const likesRouter = require("./routes/Likes");
 app.use("/likes", likesRouter);
 
 db.sequelize.sync().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
     });
 });

@@ -13,6 +13,7 @@ export const Home = () => {
     const navigate = useNavigate();
     const [listofPosts, setListOfPosts] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
@@ -20,6 +21,7 @@ export const Home = () => {
             return;
         }
 
+        setLoading(true);
         Axios.get(`${import.meta.env.VITE_API_URL}/posts`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
@@ -33,12 +35,14 @@ export const Home = () => {
                         return like.PostId;
                     }),
                 );
+                setLoading(false);
             })
             .catch((error) => {
                 console.error("Failed to fetch posts:", error);
                 if (error.response && error.response.status === 401) {
                     navigate("/auth/login");
                 }
+                setLoading(false);
             });
     }, []);
 
@@ -85,7 +89,11 @@ export const Home = () => {
                     </p>
                 </div>
 
-                {listofPosts.length > 0 ? (
+                {loading ? (
+                    <div className="flex justify-center items-center py-20">
+                        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryBlue"></div>
+                    </div>
+                ) : listofPosts.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {listofPosts.map((value, key) => {
                             const isLiked = likedPosts.includes(value.id);
@@ -103,7 +111,7 @@ export const Home = () => {
                                         </h2>
                                     </div>
 
-                                    <p className="text-gray-700 text-lg mb-6 mx-4 leading-relaxed overflow-hidden line-clamp-3">
+                                    <p className="text-gray-700 text-lg mb-6 mx-4 break-all whitespace-pre-line  overflow-hidden line-clamp-3">
                                         {value.postText}
                                     </p>
 

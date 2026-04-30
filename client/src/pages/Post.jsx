@@ -25,9 +25,12 @@ function Post() {
     const ref = useRef();
     const [likesCount, setLikesCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios
+        setLoading(true);
+
+        const fetchPost = axios
             .get(`${import.meta.env.VITE_API_URL}/posts/byId/${id}`, {
                 headers: {
                     accessToken: localStorage.getItem("accessToken"),
@@ -42,10 +45,19 @@ function Post() {
             .catch((error) => {
                 console.log(error);
             });
-        axios
+
+        const fetchComments = axios
             .get(`${import.meta.env.VITE_API_URL}/comments/${id}`)
             .then((response) => {
                 setComments(response.data);
+            });
+
+        Promise.all([fetchPost, fetchComments])
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
             });
     }, []);
 
@@ -163,7 +175,11 @@ function Post() {
         return () =>
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-    return (
+    return loading ? (
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pt-[50px] flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primaryBlue"></div>
+        </div>
+    ) : (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pt-[50px] flex flex-col items-start gap-8 px-4 py-8">
             <div className="w-full px-4 py-8">
                 {/* <Card className="w-full max-w-2xl shadow-lg border border-gray-200"> */}
@@ -183,7 +199,7 @@ function Post() {
                         {/* Dropdown */}
                         {open && (
                             <div className="absolute top-10 mt-4 w-36 bg-white border rounded shadow z-50">
-                                {!ismyPost ? (
+                                {ismyPost ? (
                                     <div className="flex flex-col">
                                         <button
                                             className="block w-full px-4 py-2 hover:bg-gray-100"
@@ -195,7 +211,7 @@ function Post() {
                                         >
                                             Edit Title
                                         </button>
-                                        <button
+                                        {/* <button
                                             className="block w-full px-4 py-2 hover:bg-gray-100 "
                                             onClick={() => {
                                                 if (ismyPost) {
@@ -204,7 +220,7 @@ function Post() {
                                             }}
                                         >
                                             Edit Post
-                                        </button>{" "}
+                                        </button>{" "} */}
                                         <button
                                             className="text-red-500"
                                             onClick={() =>

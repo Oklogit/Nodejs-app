@@ -1,10 +1,14 @@
 {
     "development": {
-        "username": "root",
-        "password": "password",
-        "database": "newdb",
-        "host": "127.0.0.1",
-        "dialect": "mysql"
+        "use_env_variable": "DATABASE_URL",
+        "dialect": "postgres",
+        "database": "items",
+        "dialectOptions": {
+            "ssl": {
+                "require": true,
+                "rejectUnauthorized": false
+            }
+        }
     },
     "test": {
         "username": "root",

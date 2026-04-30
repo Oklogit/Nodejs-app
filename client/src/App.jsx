@@ -24,6 +24,7 @@ import {
 
 const App = () => {
     const navigate = useNavigate();
+    // navigate("/registration");
 
     const [authState, setAuthState] = useState({
         username: "",
